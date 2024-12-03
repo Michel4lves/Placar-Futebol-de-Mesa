@@ -1,0 +1,33 @@
+name: placar-CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  flake8-lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        env:
+          PIPENV_IGNORE_VIRTUALENVS: '1'
+        run: |
+          pip install pipenv
+          pipenv install --dev --python=$(which python)
+
+      - name: Run Flake8
+        run: |
+          pipenv run flake8 .
