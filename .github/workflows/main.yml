@@ -28,6 +28,23 @@ jobs:
           pip install pipenv
           pipenv install --dev --python=$(which python)
 
+      - name: Generate requirements.txt
+        run: pipenv requirements > requirements.txt
+
       - name: Run Flake8
         run: |
           pipenv run flake8 .
+
+  safety-cli:
+    needs: flake8-lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Run Safety CLI to check for vulnerabilities
+        uses: pyupio/safety-action@v1
+        with:
+          api-key: ${{ secrets.SAFETY_API_KEY }}
+          args: --detailed-output --input=requirements.txt
