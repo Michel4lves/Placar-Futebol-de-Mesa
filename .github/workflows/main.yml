@@ -48,3 +48,32 @@ jobs:
         with:
           api-key: ${{ secrets.SAFETY_API_KEY }}
           args: --detailed-output --input=requirements.txt
+
+  test-coverage:
+    needs: safety-cli
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        env:
+          PIPENV_IGNORE_VIRTUALENVS: '1'
+        run: |
+          pip install pipenv
+          pipenv install --dev --python=$(which python)
+
+      - name: Run pytest
+        run: |
+          pipenv run pytest --cov=cursodjango --maxfail=5 --disable-warnings --cov-report=xml
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
