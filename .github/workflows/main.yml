@@ -27,6 +27,7 @@ jobs:
         run: |
           pip install pipenv
           pipenv install --dev --python=$(which python)
+          cp contrib/env-sample .env
 
       - name: Generate requirements.txt
         run: pipenv requirements > requirements.txt
@@ -68,6 +69,7 @@ jobs:
         run: |
           pip install pipenv
           pipenv install --dev --python=$(which python)
+          cp contrib/env-sample .env
 
       - name: Run pytest
         run: |
