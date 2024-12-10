@@ -176,3 +176,7 @@ bin/
 
 # Bancos de dados SQLite
 *.sqlite3
+
+# Media & static files
+staticfiles/
+mediafiles/
