@@ -54,6 +54,19 @@ jobs:
     needs: safety-cli
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:13.6
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: testdb
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -72,6 +85,8 @@ jobs:
           cp contrib/env-sample .env
 
       - name: Run pytest
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/testdb
         run: |
           pipenv run pytest --cov=placarfutmesa --maxfail=5 --disable-warnings --cov-report=xml
 
