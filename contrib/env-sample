@@ -2,3 +2,6 @@ DEBUG = False
 SECRET_KEY = set your secret key
 ALLOWED_HOSTS=localhost, 127.0.0.1
 DATABASE_URL: postgres://postgres:postgres@localhost:5432/testdb
+AWS_STORAGE_BUCKET_NAME = Your AWS bucket name
+AWS_ACCESS_KEY_ID = Set your AWS IAM access key id
+AWS_SECRET_ACCESS_KEY = Set your AWS IAM secret access key
