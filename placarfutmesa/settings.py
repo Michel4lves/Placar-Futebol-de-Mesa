@@ -31,6 +31,7 @@ DEBUG = config('DEBUG', cast=bool)
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
 
+AUTH_USER_MODEL = 'base.User'
 
 # Application definition
 
@@ -83,9 +84,7 @@ default_db_url = 'sqlite:///' + os.path.join(BASE_DIR / 'db.sqlite3')
 parse_database = partial(dj_database_url.parse, conn_max_age=600)
 
 DATABASES = {
-    'default': {
-        'default': config('DATABASE_URL', default=default_db_url, cast=parse_database)
-    }
+    'default': config('DATABASE_URL', default=default_db_url, cast=parse_database)
 }
 
 
@@ -132,6 +131,9 @@ if AWS_STORAGE_BUCKET_NAME == '':
 else:
     AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
     AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
+
+    STATIC_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/static/'
+    MEDIA_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/media/'
 
     STORAGES = {
         "staticfiles": {
