@@ -7,7 +7,7 @@ import django
 """
 
 # Configurar as variáveis de ambiente
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'cursodjango.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'placarfutmesa.settings')
 django.setup()
 
 User = get_user_model()
