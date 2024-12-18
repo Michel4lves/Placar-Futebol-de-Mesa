@@ -1,7 +1,7 @@
+from django.core.validators import RegexValidator
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.core.mail import send_mail
-from django.core.validators import RegexValidator
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -15,7 +15,7 @@ class UserManager(BaseUserManager):
         Create and save a user with the given CPF and password.
         """
         if not cpf:
-            raise ValueError("The given CPF must be set")
+            raise ValueError("The given username must be set")
         user = self.model(cpf=cpf, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
@@ -40,7 +40,9 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
     """
-    User model where CPF is the unique identifier instead of username or email.
+    App base User class.
+
+    Cpf and password are required. Other fields are optional.
     """
     cpf_validator = RegexValidator(
         regex=r'^\d{11}$',
@@ -54,14 +56,14 @@ class User(AbstractBaseUser, PermissionsMixin):
         validators=[cpf_validator],
         help_text=_("Enter your 11-digit CPF without punctuation."),
     )
+
     first_name = models.CharField(_("first name"), max_length=150, blank=True)
     last_name = models.CharField(_("last name"), max_length=150, blank=True)
     nickname = models.CharField(_("nickname"), max_length=150, blank=True)
-    use_nickname = models.BooleanField(_("use nickname"), default=False)
-    association = models.ForeignKey("Associacao", on_delete=models.SET_NULL, null=True, blank=True)
+    email = models.EmailField(_("email address"), blank=True, null=True)
+    association = models.ForeignKey("Associate", on_delete=models.SET_NULL, null=True, blank=True)
     birth_year = models.PositiveIntegerField(_("year of birth"), null=True, blank=True)
     category = models.CharField(_("category"), max_length=50, blank=True)
-    email = models.EmailField(_("email address"), blank=True, null=True)
     is_staff = models.BooleanField(
         _("staff status"),
         default=False,
@@ -81,7 +83,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     EMAIL_FIELD = "email"
     USERNAME_FIELD = "cpf"
-    REQUIRED_FIELDS = []  # Nenhum campo adicional é obrigatório
+    REQUIRED_FIELDS = []
 
     class Meta:
         verbose_name = _("user")
@@ -93,36 +95,38 @@ class User(AbstractBaseUser, PermissionsMixin):
             self.email = self.__class__.objects.normalize_email(self.email)
 
     def get_full_name(self):
-        """Return the first_name and last_name."""
-        return f"{self.first_name} {self.last_name}".strip()
+        """
+        Return the first_name plus the last_name, with a space in between.
+        """
+        full_name = "%s %s" % (self.first_name, self.last_name)
+        return full_name.strip()
 
     def get_short_name(self):
-        """Return the short name for the user."""
-        return self.nickname if self.use_nickname and self.nickname else self.first_name
+        """Return the nickname or short name for the user."""
+        return self.nickname if self.nickname != '' else self.first_name
 
     def email_user(self, subject, message, from_email=None, **kwargs):
-        """Send an email to this user."""
-        if self.email:
-            send_mail(subject, message, from_email, [self.email], **kwargs)
+        """Going to email to this user."""
+        send_mail(subject, message, from_email, [self.email], **kwargs)
 
-    def save(self, *args, **kwargs):
-        """Automatically set the category based on birth year."""
-        if self.birth_year:
-            current_year = timezone.now().year
-            age = current_year - self.birth_year
-            if age < 50:
-                self.category = "Free"
-            elif 50 <= age < 60:
-                self.category = "Senior"
-            else:
-                self.category = "Master"
-        super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     """Automatically set the category based on birth year."""
+    #     if self.birth_year:
+    #         current_year = timezone.now().year
+    #         age = current_year - self.birth_year
+    #         if age < 50:
+    #             self.category = "Free"
+    #         elif 50 <= age < 60:
+    #             self.category = "Senior"
+    #         else:
+    #             self.category = "Master"
+    #     super().save(*args, **kwargs)
 
 
-class Associacao(models.Model):
+class Associate(models.Model):
     """Model for associations."""
-    name = models.CharField(_("name"), max_length=150)
     acronym = models.CharField(_("acronym"), max_length=20)
+    name = models.CharField(_("name"), max_length=150)
     logo = models.ImageField(_("logo"), upload_to="logos/", blank=True, null=True)
 
     class Meta:
