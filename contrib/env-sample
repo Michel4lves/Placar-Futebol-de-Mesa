@@ -6,3 +6,4 @@ AWS_STORAGE_BUCKET_NAME = Your AWS bucket name
 AWS_ACCESS_KEY_ID = Set your AWS IAM access key id
 AWS_SECRET_ACCESS_KEY = Set your AWS IAM secret access key
 INTERNAL_IPS=127.0.0.1
+SENTRY_DSN

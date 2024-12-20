@@ -12,6 +12,7 @@ psycopg2-binary = "*"
 django-storages = {extras = ["s3"], version = "*"}
 pillow = "*"
 django-debug-toolbar = "*"
+sentry-sdk = {extras = ["django"], version = "*"}
 
 [dev-packages]
 flake8 = "*"
