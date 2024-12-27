@@ -1,0 +1,303 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    list-style: none;
+    user-select: none;
+}
+
+:root {
+    --text: #03304F;
+    --sec-text: #ffffff;
+    --border: #7b7b7b;
+    --hover: #f21212;
+    --bg: #03304F;
+    --sec-bg: #ffffff;
+    --sec-hover: #fffba7;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(45deg, #ffffff, #e4e6ff);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+nav {
+    position: relative;
+    width: 100%;
+    min-height: 150px;
+    padding: 10px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+}
+
+nav .logo {
+    padding-left: 20px;
+}
+
+nav .menu-list {
+    position: relative;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
+}
+
+nav .menu-list li a {
+    color: var(--text);
+    padding: 5px;
+    font-weight: bold;
+    font-size: 17px;
+    text-transform: uppercase;
+    list-style: none;
+}
+
+nav .menu-list .list-dropdown {
+    position: absolute;
+    top: 25px;
+    right: -65px;
+    padding: 0 10px 10px;
+    width: 250px;
+    height: 0px;
+    border-radius: 5px;
+    background-color: var(--sec-bg);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: flex-start;
+    gap: 10px;
+    z-index: 1;
+    transition: 0.5s;
+    overflow: hidden;
+    visibility: hidden;
+}
+
+nav .menu-list .list-dropdown.dropdown {
+    visibility: visible;
+    height: 100px;
+}
+
+nav .menu-list li a:active,
+nav .menu-list li a:hover {
+    color: var(--hover);
+}
+
+nav .menu-toggle {
+    all: unset;
+    position: absolute;
+    top: 40px;
+    right: 20px;
+    padding: 10px;
+    font-size: 30px;
+    color: var(--text);
+    margin-right: 20px;
+    cursor: pointer;
+    display: none;
+}
+
+
+.carousel-container {
+    margin: 20px 0;
+    width: 100%;
+    overflow: hidden;
+    border: var(--border) 1px solid;
+    border-radius: 5px;
+    background-color: var(--bg);
+}
+
+.carousel-track {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.carousel-item {
+    min-width: 100%;
+    text-align: center;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+}
+
+.carousel-item h3 {
+    margin: 10px 0;
+    font-size: 1.5rem;
+    color: var(--sec-text);
+}
+
+.carousel-item p {
+    font-size: 1rem;
+    color: var(--sec-hover);
+}
+
+
+.card-bx {
+    position: relative;
+    margin-top: 30px;
+    width: 100%;
+    display: flex;
+    gap: 20px;
+}
+
+.card-bx .in-progress,
+.card-bx .closed {
+    position: relative;
+    width: 49%;
+    min-height: 300px;
+    padding: 10px;
+    border: var(--border) 1px solid;
+    border-radius: 10px;
+}
+
+.card-bx .in-progress .bx-title,
+.card-bx .closed .bx-title {
+    background-color: var(--sec-bg);
+    padding: 15px;
+    /* border-radius: 5px; */
+    color: var(--sec-text);
+    background-color: var(--bg);
+}
+
+.card-bx .closed .bx-title {
+    color: var(--hover);
+}
+
+.card-bx .in-progress .in-progress-bx,
+.card-bx .closed .closed-bx {
+    position: relative;
+    margin: 20px 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    
+}
+
+.competition-card {
+    position: relative;
+    display: flex;
+    align-items: first baseline;
+    justify-content: space-between;
+    padding: 15px;
+    background-color: #ffffff;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.competition-card:hover {
+    background-color: var(--sec-hover);
+}
+
+.competition-card .field-1 {
+    position: relative;
+    display: flex;
+    align-items: first baseline;
+    justify-content: flex-start;
+    gap: 10px;
+}
+
+.footer {
+    position: relative;
+    margin-top: 50px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.footer img {
+    width: 100px;
+}
+
+
+@media (max-width: 992px) {
+    .card-bx {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 0 50px;
+    }
+
+    .card-bx .in-progress,
+    .card-bx .closed {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    nav {
+        flex-direction: column;
+    }
+
+    nav .logo {
+        width: 100%;
+        left: 20px;
+    }
+
+    nav .menu-toggle {
+        display: block;
+    }
+
+    nav .menu-list {
+        position: relative;
+        width: 100%;
+        height: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-around;
+        overflow: hidden;
+        transition: 0.5s;
+    }
+
+    nav .menu-list.collapsed {
+        height: 150px;
+    }
+
+    nav .menu-list.collapsed:has(.list-dropdown.dropdown) {
+        height: 300px;
+    }
+
+    nav .menu-list .menu-dropdown {
+        width: 100%;
+    }
+
+    nav .menu-list .menu-dropdown .list-dropdown {
+        position: relative;
+        top: 0px;
+        right: 0px;
+        padding: 10px;
+        width: 100%;
+        border-radius: 5px;
+        justify-content: flex-start;
+        align-items: center;
+    }
+
+    .carousel-item {
+        flex-direction: column;
+        gap: 10px;
+        padding: 20px;
+    }
+}
+
+@media (max-width: 576px) {
+    nav .logo {
+        padding-left: 5px;
+    }
+
+    .card-bx {
+        padding: 0 5px;
+    }
+
+    .competition-card {
+        font-size: 0.8rem;
+    }
+}
