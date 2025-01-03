@@ -15,6 +15,7 @@
                 crossorigin="anonymous"
                 referrerpolicy="no-referrer"
         />
+        <link rel="icon" type="image/png" href="{% static 'img/decop-icon.png' %}">
     </head>
     <body>
         <div class="container">
@@ -25,7 +26,7 @@
                         <img src="{% static 'img/logo_decop.webp' %}" alt="decop-logo">
                     </a>
                     <ul class="menu-list" id="menuList">
-                        <li><a href="#" class="active">Competições</a></li>
+                        <li><a href="{% url 'base:home' %}" class="active">Competições</a></li>
                         <li><a href="#">Associações</a></li>
                         <li><a href="#">Jogadores</a></li>
                         <li><a href="#" id="department">Departamento</a></li>
@@ -66,44 +67,47 @@
                     <div class="in-progress">
                         <h3 class="bx-title">Em andamento:</h3>
                         <div class="in-progress-bx">
-                            <div class="competition-card">
-                                <div class="field-1">
-                                    <i class="fas fa-medal"></i>
-                                    <h3 class="comp-title">Campeonato Interno</h3>
-                                    <h4 class="stage">Etapa 2</h4>
-                                    
-                                </div>
-                                <div class="field-2">
-                                    <h4 class="modality">Cavado</h4>
-                                </div>
-                            </div>
-                            <div class="competition-card">
-                                <div class="field-1">
-                                    <i class="fas fa-trophy"></i>
-                                    <h3 class="comp-title">Copa COP</h3>
-                                    <h4 class="stage"></h4>
-                                    
-                                </div>
-                                <div class="field-2">
-                                    <h4 class="modality">Cavado</h4>
-                                </div>
-                            </div>
+                            {% for competition in competitions %}
+                                {% if competition.comp_status == 'Progress' %}
+                                    <div class="competition-card">
+                                        <div class="field-1">
+                                            {% if competition.comp_type == 'Campeonato' %}
+                                                <i class="fas fa-medal"></i>
+                                            {% elif competition.comp_type == 'Copa' %}
+                                                <i class="fas fa-trophy"></i>
+                                            {% endif %}
+                                            <h3 class="comp-title">{{ competition.comp_name | default:'Faltando Nome' }}</h3>
+                                            <h4 class="stage">{{ competition.comp_stage | default:'' }}</h4>
+                                        </div>
+                                        <div class="field-2">
+                                            <h4 class="modality">{{ competition.comp_modality | default:'Faltando Modalidade' }}</h4>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
                         </div>
                     </div>
                     <div class="closed">
                         <h3 class="bx-title">Encerrados:</h3>
                         <div class="closed-bx">
-                            <div class="competition-card">
-                                <div class="field-1">
-                                    <i class="fas fa-trophy"></i>
-                                    <h3 class="comp-title">Circulão</h3>
-                                    <h4 class="stage"></h4>
-                                    
-                                </div>
-                                <div class="field-2">
-                                    <h4 class="modality">Cavado</h4>
-                                </div>
-                            </div>
+                            {% for competition in competitions %}
+                                {% if competition.comp_status == 'Closed' %}
+                                    <div class="competition-card">
+                                        <div class="field-1">
+                                            {% if competition.comp_type == 'Campeonato' %}
+                                                <i class="fas fa-medal"></i>
+                                            {% elif competition.comp_type == 'Copa' %}
+                                                <i class="fas fa-trophy"></i>
+                                            {% endif %}
+                                            <h3 class="comp-title">{{ competition.comp_name | default:'Faltando Nome' }}</h3>
+                                            <h4 class="stage">{{ competition.comp_stage | default:'' }}</h4>
+                                        </div>
+                                        <div class="field-2">
+                                            <h4 class="modality">{{ competition.comp_modality | default:'Faltando Modalidade' }}</h4>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
